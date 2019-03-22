@@ -33,7 +33,7 @@ class Example
     interruptible :user_quit do                 # wrap code with interruptible
       (1..10).to_a.each do |i|
         puts e: i
-        throw :user_quit if i == stop_at        # catch works just fine too
+        throw :user_quit if i == stop_at        # throw works just fine too
         puts f: i
       end
     end

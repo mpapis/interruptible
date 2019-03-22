@@ -44,17 +44,17 @@ module Interruptible
 
   # Wraps a `catch` in a way that allows it to be persisted for all other
   # instances where the code should be interrupted.
-  def interruptible(signal = :interrupt)
+  def interruptible(signal = :interrupt, &_block)
     flag = instance_variable_get("@interrupted_#{signal}")
     return if flag
     result = nil
     flag =
       catch(signal) do
         result = yield
+
+        # when stopped catch returns nil, otherwise it returns the last value,
+        # we are using the true to signal it executed without interruption
         true
-        # when stopped catch returns nil, othervise it returns the last value,
-        # we are using the true to signal it executed without interruption,
-        # thus when we save the flag we use the negation
       end
     instance_variable_set("@interrupted_#{signal}", true) unless flag
     result
